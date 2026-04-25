@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cloud DevOps</title>
+  <title>Secure Viewer</title>
 
   <style>
     body {
@@ -41,11 +42,33 @@
 
     #viewer {
       display: none;
+      padding: 20px;
+    }
+
+    #image-container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .page {
+      margin-bottom: 20px;
+      background: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      min-height: 500px;
+    }
+
+    .page img {
+      width: 100%;
+      display: block;
     }
   </style>
+
 </head>
 
 <body>
+
+<!-- 🔐 LOCK SCREEN -->
 
 <div class="container" id="lock">
   <h2>Enter Code</h2>
@@ -67,10 +90,15 @@
   </div>
 </div>
 
-<div id="viewer"></div>
+<!-- 📄 VIEWER -->
+
+<div id="viewer">
+  <div id="image-container"></div>
+</div>
 
 <script>
-  const correct = "1234";
+  // 🔐 PIN LOGIC
+  const correct = "1234"; // change this
   let input = "";
 
   function update() {
@@ -91,9 +119,7 @@
 
   function check() {
     if (input === correct) {
-      document.getElementById("lock").style.display = "none";
-      document.getElementById("viewer").style.display = "block";
-      loadImages();
+      unlock();
     } else {
       alert("Wrong code");
       input = "";
@@ -101,15 +127,58 @@
     }
   }
 
-  function loadImages() {
-    const viewer = document.getElementById("viewer");
+  function unlock() {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("viewer").style.display = "block";
+    loadImages();
+  }
 
-    for (let i = 1; i <= 5; i++) { // test with 5 first
-      const img = document.createElement("img");
-      img.src = `images/page-${String(i).padStart(3, "0")}.jpg`;
-      img.style.width = "100%";
-      img.style.marginBottom = "10px";
-      viewer.appendChild(img);
+  // 📄 LAZY LOADING VIEWER
+  const totalPages = 862; // 🔥 CHANGE if needed
+
+  function loadImages() {
+    const container = document.getElementById("image-container");
+
+    for (let i = 1; i <= totalPages; i++) {
+      const div = document.createElement("div");
+      div.className = "page";
+      div.dataset.page = i;
+      container.appendChild(div);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const page = entry.target;
+        const pageNum = parseInt(page.dataset.page);
+
+        if (entry.isIntersecting) {
+          loadPage(page, pageNum);
+        } else {
+          unloadPage(page);
+        }
+      });
+    }, {
+      rootMargin: "1000px"
+    });
+
+    document.querySelectorAll(".page").forEach(p => observer.observe(p));
+  }
+
+  function loadPage(container, pageNum) {
+    if (container.querySelector("img")) return;
+
+    const img = document.createElement("img");
+    img.src = `images/page-${String(pageNum).padStart(3, "0")}.jpg`;
+
+    container.innerHTML = "";
+    container.appendChild(img);
+  }
+
+  function unloadPage(container) {
+    const rect = container.getBoundingClientRect();
+
+    if (rect.top > window.innerHeight * 2 || rect.bottom < -window.innerHeight * 2) {
+      container.innerHTML = "";
     }
   }
 </script>
