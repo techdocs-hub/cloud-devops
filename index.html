@@ -166,14 +166,20 @@
   }
 
   function loadPage(container, pageNum) {
-    if (container.querySelector("img")) return;
+  if (container.querySelector("img")) return;
 
-    const img = document.createElement("img");
-    img.src = `images/page-${String(pageNum).padStart(3, "0")}.jpg`;
+  const img = document.createElement("img");
 
-    container.innerHTML = "";
-    container.appendChild(img);
-  }
+  img.src = `images/page-${String(pageNum).padStart(3, "0")}.jpg`;
+
+  // ✅ Handle missing images
+  img.onerror = function () {
+    container.remove(); // remove broken page completely
+  };
+
+  container.innerHTML = "";
+  container.appendChild(img);
+}
 
   function unloadPage(container) {
     const rect = container.getBoundingClientRect();
