@@ -125,7 +125,7 @@ iframe {
 
 <div class="header">Cloud DevOps Portal</div>
 
-<!-- LOCK -->
+<!-- 🔐 LOCK -->
 
 <div id="lock" class="container">
   <h2>Access Required</h2>
@@ -149,7 +149,7 @@ iframe {
   </div>
 </div>
 
-<!-- HOME -->
+<!-- 🏠 HOME -->
 
 <div id="home" class="home">
   <div class="card" onclick="openCloud()">
@@ -161,7 +161,7 @@ iframe {
   </div>
 </div>
 
-<!-- IMAGE VIEWER -->
+<!-- 📄 CLOUD IMAGE VIEWER -->
 
 <div id="viewer">
   <div class="back-btn" onclick="goHome()">← Back</div>
@@ -169,7 +169,7 @@ iframe {
   <div id="image-container"></div>
 </div>
 
-<!-- PDF VIEWER -->
+<!-- 📘 DEVOPS PDF VIEWER -->
 
 <div id="pdfViewer">
   <div class="back-btn" onclick="goHome()">← Back</div>
@@ -178,17 +178,18 @@ iframe {
 
 <script>
 
-// PIN INPUT
+// INPUT
 let input = "";
 
-// 🔐 OBFUSCATED PIN LOGIC
+// 🔐 OBFUSCATED PIN (2027)
 function getCode() {
-  const x = ["Mj", "AyN", "w=="];
+  const x = ["==w", "NyA", "jM"];
   const y = x.join("");
   const z = y.split("").reverse().join("");
   return atob(z);
 }
 
+// INPUT FUNCTIONS
 function update() {
   document.getElementById("display").innerText = "•".repeat(input.length);
 }
@@ -214,7 +215,7 @@ function check() {
   }
 }
 
-// CLOUD VIEWER
+// CLOUD
 const totalPages = 862;
 
 function openCloud() {
@@ -275,7 +276,7 @@ function updateIndicator(num) {
     "Page " + num + " / " + totalPages;
 }
 
-// DEVOPS PDF
+// DEVOPS
 function openDevOps() {
   document.getElementById("home").style.display = "none";
   document.getElementById("pdfViewer").style.display = "block";
