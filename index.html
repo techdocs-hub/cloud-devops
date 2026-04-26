@@ -2,106 +2,134 @@
 
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cloud DevOps Docs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud DevOps Portal</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+}
 
-    /* HEADER */
-    .header {
-      background: #020617;
-      padding: 12px 20px;
-      font-size: 18px;
-      font-weight: bold;
-      border-bottom: 1px solid #1e293b;
-    }
+.header {
+  background: #020617;
+  padding: 14px 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #1e293b;
+}
 
-    /* LOCK SCREEN */
-    .container {
-      max-width: 400px;
-      margin: 80px auto;
-      text-align: center;
-    }
+.container {
+  max-width: 400px;
+  margin: 80px auto;
+  text-align: center;
+}
 
-    #display {
-      font-size: 28px;
-      letter-spacing: 10px;
-      margin-bottom: 20px;
-    }
+#display {
+  font-size: 28px;
+  letter-spacing: 10px;
+  margin-bottom: 20px;
+}
 
-    .keypad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
 
-    button {
-      padding: 18px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #1e293b;
-      color: white;
-      cursor: pointer;
-    }
+button {
+  padding: 18px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  background: #1e293b;
+  color: white;
+  cursor: pointer;
+}
 
-    button:hover {
-      background: #334155;
-    }
+button:hover {
+  background: #334155;
+}
 
-    /* VIEWER */
-    #viewer {
-      display: none;
-      padding: 20px;
-    }
+.home {
+  display: none;
+  text-align: center;
+  margin-top: 80px;
+}
 
-    #image-container {
-      max-width: 850px;
-      margin: auto;
-    }
+.card {
+  background: #1e293b;
+  margin: 20px auto;
+  padding: 25px;
+  width: 260px;
+  border-radius: 12px;
+  cursor: pointer;
+}
 
-    .page {
-      margin-bottom: 25px;
-      background: #1e293b;
-      border-radius: 10px;
-      overflow: hidden;
-      min-height: 500px;
-      position: relative;
-    }
+.card:hover {
+  background: #334155;
+}
 
-    .page img {
-      width: 100%;
-      display: block;
-    }
+/* IMAGE VIEWER */
+#viewer {
+  display: none;
+  padding: 20px;
+}
 
-    /* PAGE NUMBER */
-    .page-number {
-      position: sticky;
-      top: 10px;
-      text-align: center;
-      font-size: 14px;
-      color: #94a3b8;
-      margin-bottom: 10px;
-    }
-  </style>
+#image-container {
+  max-width: 850px;
+  margin: auto;
+}
+
+.page {
+  margin-bottom: 25px;
+  background: #1e293b;
+  border-radius: 10px;
+  min-height: 500px;
+}
+
+.page img {
+  width: 100%;
+}
+
+/* PDF VIEWER */
+#pdfViewer {
+  display: none;
+  height: 90vh;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* COMMON */
+.page-number {
+  text-align: center;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.back-btn {
+  margin: 10px;
+  cursor: pointer;
+  color: #38bdf8;
+}
+</style>
 
 </head>
 
 <body>
 
-<div class="header">Cloud DevOps Documentation</div>
+<div class="header">Cloud DevOps Portal</div>
 
 <!-- LOCK -->
 
-<div class="container" id="lock">
+<div id="lock" class="container">
   <h2>Access Required</h2>
-  <p style="color:#94a3b8;font-size:14px;">Enter access code to continue</p>
+  <p style="color:#94a3b8;">Enter access code</p>
 
   <div id="display"></div>
 
@@ -121,107 +149,137 @@
   </div>
 </div>
 
-<!-- VIEWER -->
+<!-- HOME -->
+
+<div id="home" class="home">
+  <div class="card" onclick="openCloud()">
+    Cloud
+  </div>
+
+  <div class="card" onclick="openDevOps()">
+    DevOps
+  </div>
+</div>
+
+<!-- IMAGE VIEWER -->
 
 <div id="viewer">
-  <div class="page-number" id="pageIndicator">Page 1</div>
+  <div class="back-btn" onclick="goHome()">← Back</div>
+  <div class="page-number" id="pageIndicator"></div>
   <div id="image-container"></div>
 </div>
 
+<!-- PDF VIEWER -->
+
+<div id="pdfViewer">
+  <div class="back-btn" onclick="goHome()">← Back</div>
+  <iframe src="devops.pdf"></iframe>
+</div>
+
 <script>
-  const correct = "2027";
-  let input = "";
+const correct = "739182";
+let input = "";
 
-  function update() {
-    document.getElementById("display").innerText = "•".repeat(input.length);
-  }
+const totalPages = 862;
 
-  function press(n) {
-    if (input.length < 6) {
-      input += n;
-      update();
-    }
-  }
+/* PIN */
+function update() {
+  document.getElementById("display").innerText = "•".repeat(input.length);
+}
 
-  function back() {
-    input = input.slice(0, -1);
+function press(n) {
+  input += n;
+  update();
+}
+
+function back() {
+  input = input.slice(0, -1);
+  update();
+}
+
+function check() {
+  if (input === correct) {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("home").style.display = "block";
+  } else {
+    alert("Invalid code");
+    input = "";
     update();
   }
+}
 
-  function check() {
-    if (input === correct) {
-      unlock();
-    } else {
-      alert("Invalid code");
-      input = "";
-      update();
-    }
+/* CLOUD (IMAGES) */
+function openCloud() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("viewer").style.display = "block";
+  document.getElementById("image-container").innerHTML = "";
+  loadImages();
+}
+
+function loadImages() {
+  const container = document.getElementById("image-container");
+
+  for (let i = 1; i <= totalPages; i++) {
+    const div = document.createElement("div");
+    div.className = "page";
+    div.dataset.page = i;
+    container.appendChild(div);
   }
 
-  function unlock() {
-    document.getElementById("lock").style.display = "none";
-    document.getElementById("viewer").style.display = "block";
-    loadImages();
-  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const page = entry.target;
+      const num = parseInt(page.dataset.page);
 
-  const totalPages = 862;
-
-  function loadImages() {
-    const container = document.getElementById("image-container");
-
-    for (let i = 1; i <= totalPages; i++) {
-      const div = document.createElement("div");
-      div.className = "page";
-      div.dataset.page = i;
-      container.appendChild(div);
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const page = entry.target;
-        const pageNum = parseInt(page.dataset.page);
-
-        if (entry.isIntersecting) {
-          loadPage(page, pageNum);
-          updatePageIndicator(pageNum);
-        } else {
-          unloadPage(page);
-        }
-      });
-    }, {
-      rootMargin: "300px"
+      if (entry.isIntersecting) {
+        loadPage(page, num);
+        updateIndicator(num);
+      } else {
+        unloadPage(page);
+      }
     });
+  }, { rootMargin: "300px" });
 
-    document.querySelectorAll(".page").forEach(p => observer.observe(p));
+  document.querySelectorAll(".page").forEach(p => observer.observe(p));
+}
+
+function loadPage(container, num) {
+  if (container.querySelector("img")) return;
+
+  const img = document.createElement("img");
+  img.src = `images/cloud/page-${String(num).padStart(3,"0")}.jpg`;
+
+  img.onerror = () => container.remove();
+
+  container.innerHTML = "";
+  container.appendChild(img);
+}
+
+function unloadPage(container) {
+  const rect = container.getBoundingClientRect();
+  if (rect.top > window.innerHeight * 2 || rect.bottom < -window.innerHeight * 2) {
+    container.innerHTML = "";
   }
+}
 
-  function loadPage(container, pageNum) {
-    if (container.querySelector("img")) return;
+/* DEVOPS (PDF) */
+function openDevOps() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("pdfViewer").style.display = "block";
+}
 
-    setTimeout(() => {
-      const img = document.createElement("img");
-      img.src = `images/page-${String(pageNum).padStart(3, "0")}.jpg`;
+/* BACK */
+function goHome() {
+  document.getElementById("viewer").style.display = "none";
+  document.getElementById("pdfViewer").style.display = "none";
+  document.getElementById("home").style.display = "block";
+}
 
-      img.onerror = function () {
-        container.remove();
-      };
-
-      container.innerHTML = "";
-      container.appendChild(img);
-    }, 100);
-  }
-
-  function unloadPage(container) {
-    const rect = container.getBoundingClientRect();
-
-    if (rect.top > window.innerHeight * 2 || rect.bottom < -window.innerHeight * 2) {
-      container.innerHTML = "";
-    }
-  }
-
-  function updatePageIndicator(pageNum) {
-    document.getElementById("pageIndicator").innerText = "Page " + pageNum + " / " + totalPages;
-  }
+/* PAGE INDICATOR */
+function updateIndicator(num) {
+  document.getElementById("pageIndicator").innerText =
+    "Page " + num + " / " + totalPages;
+}
 </script>
 
 </body>
