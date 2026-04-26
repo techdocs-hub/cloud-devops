@@ -177,12 +177,18 @@ iframe {
 </div>
 
 <script>
-const correct = "2027";
+
+// PIN INPUT
 let input = "";
 
-const totalPages = 862;
+// 🔐 OBFUSCATED PIN LOGIC
+function getCode() {
+  const x = ["Mj", "AyN", "w=="];
+  const y = x.join("");
+  const z = y.split("").reverse().join("");
+  return atob(z);
+}
 
-/* PIN */
 function update() {
   document.getElementById("display").innerText = "•".repeat(input.length);
 }
@@ -198,7 +204,7 @@ function back() {
 }
 
 function check() {
-  if (input === correct) {
+  if (input === getCode()) {
     document.getElementById("lock").style.display = "none";
     document.getElementById("home").style.display = "block";
   } else {
@@ -208,7 +214,9 @@ function check() {
   }
 }
 
-/* CLOUD (IMAGES) */
+// CLOUD VIEWER
+const totalPages = 862;
+
 function openCloud() {
   document.getElementById("home").style.display = "none";
   document.getElementById("viewer").style.display = "block";
@@ -262,24 +270,24 @@ function unloadPage(container) {
   }
 }
 
-/* DEVOPS (PDF) */
+function updateIndicator(num) {
+  document.getElementById("pageIndicator").innerText =
+    "Page " + num + " / " + totalPages;
+}
+
+// DEVOPS PDF
 function openDevOps() {
   document.getElementById("home").style.display = "none";
   document.getElementById("pdfViewer").style.display = "block";
 }
 
-/* BACK */
+// BACK
 function goHome() {
   document.getElementById("viewer").style.display = "none";
   document.getElementById("pdfViewer").style.display = "none";
   document.getElementById("home").style.display = "block";
 }
 
-/* PAGE INDICATOR */
-function updateIndicator(num) {
-  document.getElementById("pageIndicator").innerText =
-    "Page " + num + " / " + totalPages;
-}
 </script>
 
 </body>
